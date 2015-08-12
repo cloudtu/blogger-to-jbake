@@ -49,18 +49,22 @@ public class Transformer {
 				// 處理 <img> tag
 				Elements imgs = doc.select("img");
 				for (Element img : imgs) {
-					final String imgSrcUrl = img.attr("src");
-					final String imgFileName = imgFileNamePrefix + StringUtils.substringAfterLast(imgSrcUrl, "/");
+					String tmpImgUrl = img.attr("src");
+					if(img.parent().tagName().equalsIgnoreCase("a") && StringUtils.substringAfterLast(img.parent().attr("href"), "/").contains(".")){
+						tmpImgUrl = img.parent().attr("href");
+					}					
+					final String imgUrl = tmpImgUrl;
+					final String imgFileName = imgFileNamePrefix + StringUtils.substringAfterLast(imgUrl, "/");
 					
 					// 把 <img> 裡的圖片檔下載到 local 端
 					executor.submit(new Runnable() {						
 						@Override
 						public void run() {											
 							try {
-								logger.info("save image : " + imgSrcUrl + " to " + String.format("%s/img/%s/%s/%s", outputFolderPath, year, month, imgFileName));
-								FileUtils.copyURLToFile(new URL(imgSrcUrl), 
+								logger.info("save image : " + imgUrl + " to " + String.format("%s/img/%s/%s/%s", outputFolderPath, year, month, imgFileName));
+								FileUtils.copyURLToFile(new URL(imgUrl), 
 										new File(String.format("%s/img/%s/%s/%s", outputFolderPath, year, month, imgFileName)),
-										1000,3000);
+										3000,10000);
 							}
 							catch (Exception ex) {
 								logger.error(ex.getMessage());
