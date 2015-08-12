@@ -4,6 +4,8 @@ import java.io.File;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +19,8 @@ import org.jsoup.select.Elements;
 public class Transformer {
 	private static final Logger logger = Logger.getLogger(Transformer.class);
 
+	private static final int CONCURRENT_THREAD_AMOUNT = 100;
+	
 	private List<Article> inputArticles;
 	private String outputFolderPath;
 	
@@ -26,15 +30,18 @@ public class Transformer {
 	}
 	
 	public void traslateToJbakeFormatHtmlFile() throws RuntimeException{
+		ThreadPoolExecutor executor = null;
 		try {
+			executor = (ThreadPoolExecutor)Executors.newFixedThreadPool(CONCURRENT_THREAD_AMOUNT);
+			
 			// 先把舊資料清掉
 			if(new File(outputFolderPath).exists()){
 				FileUtils.deleteDirectory(new File(outputFolderPath));				
 			}			
 			
 			for (Article article : inputArticles) {
-				String year = DateFormatUtils.format(article.getDate(), "yyyy");
-				String month = DateFormatUtils.format(article.getDate(), "MM");
+				final String year = DateFormatUtils.format(article.getDate(), "yyyy");
+				final String month = DateFormatUtils.format(article.getDate(), "MM");
 				String imgFileNamePrefix = DateFormatUtils.format(article.getDate(), "yyyyMMddHHmm") + "_";
 				
 				Document doc = Jsoup.parseBodyFragment(article.getContent());			
@@ -42,19 +49,24 @@ public class Transformer {
 				// 處理 <img> tag
 				Elements imgs = doc.select("img");
 				for (Element img : imgs) {
-					String imgSrcUrl = img.attr("src");
-					String imgFileName = imgFileNamePrefix + StringUtils.substringAfterLast(imgSrcUrl, "/");
-
-					// 把 <img> 裡的圖片檔下載到 local 端					
-					try {
-						logger.info("save image : " + imgSrcUrl + " to " + String.format("%s/img/%s/%s/%s", outputFolderPath, year, month, imgFileName));
-						FileUtils.copyURLToFile(new URL(imgSrcUrl), 
-								new File(String.format("%s/img/%s/%s/%s", outputFolderPath, year, month, imgFileName)),
-								1000,3000);
-					}
-					catch (Exception ex) {
-						logger.error(ex.getMessage(), ex);
-					}
+					final String imgSrcUrl = img.attr("src");
+					final String imgFileName = imgFileNamePrefix + StringUtils.substringAfterLast(imgSrcUrl, "/");
+					
+					// 把 <img> 裡的圖片檔下載到 local 端
+					executor.submit(new Runnable() {						
+						@Override
+						public void run() {											
+							try {
+								logger.info("save image : " + imgSrcUrl + " to " + String.format("%s/img/%s/%s/%s", outputFolderPath, year, month, imgFileName));
+								FileUtils.copyURLToFile(new URL(imgSrcUrl), 
+										new File(String.format("%s/img/%s/%s/%s", outputFolderPath, year, month, imgFileName)),
+										1000,3000);
+							}
+							catch (Exception ex) {
+								logger.error(ex.getMessage());
+							}							
+						}
+					});
 					
 					// 修改 <img src="{imgFileName}">，讓它變成   <img src="../../../img/{year}/{month}/{imgFileName}">
 					img.attr("src", String.format("../../../img/%s/%s/%s", year, month, imgFileName));
@@ -87,9 +99,34 @@ public class Transformer {
 				FileUtils.writeStringToFile(new File(String.format("%s/blog/%s/%s/%s", outputFolderPath, year, month, article.getFileName())), 
 								jbakeFormatHtmlContent.toString(), Charset.forName("UTF-8"));
 			}
+			
+			boolean isAllImgSaved = false;
+			while(true){
+				isAllImgSaved = (executor.getQueue().isEmpty() & (executor.getActiveCount() == 0));
+				if(isAllImgSaved){
+					break;
+				}
+				
+				try {
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e) {
+					logger.warn(e.getMessage());
+				} 				
+			}
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+		finally{
+			try {
+				if(executor != null){
+					executor.shutdown();					
+				}
+			}
+			catch (Exception e) {
+				logger.error(e.getMessage(), e);
+			}
+		}			
 	}	
 }
