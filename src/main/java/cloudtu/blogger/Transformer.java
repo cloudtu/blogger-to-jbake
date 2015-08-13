@@ -48,13 +48,16 @@ public class Transformer {
 				
 				// 處理 <img> tag
 				Elements imgs = doc.select("img");
+				int imgIndex = 1;
 				for (Element img : imgs) {
 					String tmpImgUrl = img.attr("src");
-					if(img.parent().tagName().equalsIgnoreCase("a") && StringUtils.substringAfterLast(img.parent().attr("href"), "/").contains(".")){
+					// href attribute 副檔名長度為 3 代表是圖檔網址 					
+					if(img.parent().tagName().equalsIgnoreCase("a") && StringUtils.substringAfterLast(img.parent().attr("href"), ".").length() == 3){
 						tmpImgUrl = img.parent().attr("href");
 					}					
 					final String imgUrl = tmpImgUrl;
-					final String imgFileName = imgFileNamePrefix + StringUtils.substringAfterLast(imgUrl, "/");
+					final String imgFileName = imgFileNamePrefix + imgIndex + "." + StringUtils.substringAfterLast(imgUrl, ".");
+					imgIndex++;
 					
 					// 把 <img> 裡的圖片檔下載到 local 端
 					executor.submit(new Runnable() {						
@@ -64,7 +67,7 @@ public class Transformer {
 								logger.info("save image : " + imgUrl + " to " + String.format("%s/img/%s/%s/%s", outputFolderPath, year, month, imgFileName));
 								FileUtils.copyURLToFile(new URL(imgUrl), 
 										new File(String.format("%s/img/%s/%s/%s", outputFolderPath, year, month, imgFileName)),
-										3000,10000);
+										3000,5000);
 							}
 							catch (Exception ex) {
 								logger.error(ex.getMessage());
@@ -88,7 +91,20 @@ public class Transformer {
 					pre.html("<code>" + pre.html() + "</code>");
 				}
 				
-
+				// 處理 <span style="color: xxx"> tag，讓它變成 <code> tag
+				Elements spans = doc.select("span[style^=color]");
+				for (Element span : spans) {
+					span.removeAttr("style");
+					span.tagName("code");
+				}
+				
+				// 處理 <font color="xxx"> tag，讓它變成 <code> tag
+				Elements fonts = doc.select("font");
+				for (Element font : fonts) {
+					font.removeAttr("color");
+					font.tagName("code");
+				}
+				
 				article.setContent(doc.body().html());
 				
 				StringBuilder jbakeFormatHtmlContent = new StringBuilder();
