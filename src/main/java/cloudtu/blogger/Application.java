@@ -11,7 +11,15 @@ public class Application {
 	
 	private static final ResourceBundle rb = ResourceBundle.getBundle("application");	
 	private static final String BLOGGER_ATOM_FILE_PATH = rb.getString("bloggerAtomFilePath");	
-	private static final String OUTPUT_FOLDER_PATH = StringUtils.substringBeforeLast(rb.getString("outputFolderPath"), "/");
+	private static final String OUTPUT_FOLDER_PATH;
+	static{
+		if(rb.getString("outputFolderPath").endsWith("/")){
+			OUTPUT_FOLDER_PATH = StringUtils.substringBeforeLast(rb.getString("outputFolderPath"), "/");					
+		}
+		else{
+			OUTPUT_FOLDER_PATH = rb.getString("outputFolderPath");
+		}
+	}	
 	
 	public static void main(String[] args) {
 		logger.info("BloggerToHtml start");
