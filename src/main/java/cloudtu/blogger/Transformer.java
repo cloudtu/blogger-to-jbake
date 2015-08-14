@@ -75,12 +75,12 @@ public class Transformer {
 						}
 					});
 					
-					// 修改 <img src="{imgFileName}">，讓它變成   <img src="../../../img/{year}/{month}/{imgFileName}">
-					img.attr("src", String.format("../../../img/%s/%s/%s", year, month, imgFileName));
+					// 修改 <img src="{imgFileName}">，讓它變成   <img src="/img/{year}/{month}/{imgFileName}">
+					img.attr("src", String.format("/img/%s/%s/%s", year, month, imgFileName));
 					
 					// 如果 <img src="{imgFilePath}"> 外層包了 <a>，修改  <a href="{imgFilePath}"> 內容		
 					if(img.parent().tagName().equalsIgnoreCase("a")){
-						img.parent().attr("href", String.format("../../../img/%s/%s/%s", year, month, imgFileName));
+						img.parent().attr("href", String.format("/img/%s/%s/%s", year, month, imgFileName));
 					}
 				}
 				
