@@ -107,8 +107,15 @@ public class Transformer {
 				
 				article.setContent(doc.body().html());
 				
-				StringBuilder jbakeFormatHtmlContent = new StringBuilder();
-				jbakeFormatHtmlContent.append("title=").append(article.getTitle()).append("\n")
+				String articleTitle = article.getTitle();
+				if(articleTitle.contains("=")){
+					// title 裡包含 "=" 會讓 jbake 產生文章標題時出錯，將它換成 "is"					
+					articleTitle = articleTitle.replaceAll("=", "is");
+					logger.info("change artile title : " + article.getTitle() + " to " + articleTitle);
+				}
+				
+				StringBuilder jbakeFormatHtmlContent = new StringBuilder();				
+				jbakeFormatHtmlContent.append("title=").append(articleTitle).append("\n")
 								.append("date=").append(DateFormatUtils.format(article.getDate(), "yyyy-MM-dd HH:mm")).append("\n")
 								.append("type=post\n")
 								.append("tags=").append(article.getTagsAsString().toLowerCase().replaceAll(" ", "-")).append("\n")
