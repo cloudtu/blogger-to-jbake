@@ -109,7 +109,7 @@ public class Transformer {
 				
 				StringBuilder jbakeFormatHtmlContent = new StringBuilder();
 				jbakeFormatHtmlContent.append("title=").append(article.getTitle()).append("\n")
-								.append("date=").append(DateFormatUtils.format(article.getDate(), "yyyy-MM-dd")).append("\n")
+								.append("date=").append(DateFormatUtils.format(article.getDate(), "yyyy-MM-dd HH:mm")).append("\n")
 								.append("type=post\n")
 								.append("tags=").append(article.getTagsAsString().toLowerCase().replaceAll(" ", "-")).append("\n")
 								.append("status=published\n")
