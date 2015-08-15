@@ -1,4 +1,4 @@
-package cloudtu.blogger;
+package cloudtu.blog;
 
 import java.io.File;
 import java.net.URL;
@@ -16,20 +16,17 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class Transformer {
-	private static final Logger logger = Logger.getLogger(Transformer.class);
+public class BloggerTransformer extends Transformer {
+	private static final Logger logger = Logger.getLogger(BloggerTransformer.class);
 
 	private static final int CONCURRENT_THREAD_AMOUNT = 100;
 	
-	private List<Article> inputArticles;
-	private String outputFolderPath;
-	
-	public Transformer(List<Article> inputArticles, String outputFolderPath) {
-		this.inputArticles = inputArticles;
-		this.outputFolderPath = outputFolderPath;
+	public BloggerTransformer(List<Article> articles) {
+		super(articles);
 	}
-	
-	public void traslateToJbakeFormatHtmlFile() throws RuntimeException{
+
+	@Override
+	public void traslateToFile(final String outputFolderPath) throws Exception {
 		ThreadPoolExecutor executor = null;
 		try {
 			executor = (ThreadPoolExecutor)Executors.newFixedThreadPool(CONCURRENT_THREAD_AMOUNT);
@@ -39,7 +36,7 @@ public class Transformer {
 				FileUtils.deleteDirectory(new File(outputFolderPath));				
 			}			
 			
-			for (Article article : inputArticles) {
+			for (Article article : articles) {
 				final String year = DateFormatUtils.format(article.getDate(), "yyyy");
 				final String month = DateFormatUtils.format(article.getDate(), "MM");
 				String imgFileNamePrefix = DateFormatUtils.format(article.getDate(), "yyyyMMddHHmm") + "_";
@@ -142,9 +139,6 @@ public class Transformer {
 				} 				
 			}
 		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 		finally{
 			try {
 				if(executor != null){
@@ -154,6 +148,6 @@ public class Transformer {
 			catch (Exception e) {
 				logger.error(e.getMessage(), e);
 			}
-		}			
+		}		
 	}	
 }

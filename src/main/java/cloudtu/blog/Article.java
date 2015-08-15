@@ -1,4 +1,4 @@
-package cloudtu.blogger;
+package cloudtu.blog;
 
 import java.util.ArrayList;
 import java.util.Date;
