@@ -26,7 +26,7 @@ public class Application {
 	}	
 	
 	public static void main(String[] args) {
-		logger.info("BloggToLocal start");
+		logger.info("BloggerToJbake start");
 		try {						
 			List<Article> articles = new BloggerExtractor().extract(BLOG_ATOM_FILE_PATH);
 			new JbakeConverter(articles).convertToFile(OUTPUT_FOLDER_PATH);
@@ -34,6 +34,6 @@ public class Application {
 		catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-		logger.info("BloggToLocal stop");
+		logger.info("BloggerToJbake stop");
 	}
 }

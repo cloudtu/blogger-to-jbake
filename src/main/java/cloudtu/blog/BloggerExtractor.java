@@ -14,10 +14,9 @@ import com.rometools.rome.feed.synd.SyndLink;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 
-public class BloggerExtractor implements Extractor {
+public class BloggerExtractor {
 	private static final Logger logger = Logger.getLogger(BloggerExtractor.class);
 	
-	@Override
 	public List<Article> extract(String blogAtomFilePath) throws Exception{
 		List<Article> articles = new ArrayList<>();
 		SyndFeedInput input = new SyndFeedInput();
