@@ -16,17 +16,17 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class BloggerTransformer extends Transformer {
-	private static final Logger logger = Logger.getLogger(BloggerTransformer.class);
+public class JbakeConverter extends Converter {
+	private static final Logger logger = Logger.getLogger(JbakeConverter.class);
 
 	private static final int CONCURRENT_THREAD_AMOUNT = 100;
 	
-	public BloggerTransformer(List<Article> articles) {
+	public JbakeConverter(List<Article> articles) {
 		super(articles);
 	}
 
 	@Override
-	public void traslateToFile(final String outputFolderPath) throws Exception {
+	public void convertToFile(final String outputFolderPath) throws Exception {
 		ThreadPoolExecutor executor = null;
 		try {
 			executor = (ThreadPoolExecutor)Executors.newFixedThreadPool(CONCURRENT_THREAD_AMOUNT);

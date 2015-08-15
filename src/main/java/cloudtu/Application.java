@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 import cloudtu.blog.Article;
 import cloudtu.blog.BloggerExtractor;
-import cloudtu.blog.BloggerTransformer;
+import cloudtu.blog.JbakeConverter;
 
 public class Application {
 	private static final Logger logger = Logger.getLogger(Application.class);
@@ -29,7 +29,7 @@ public class Application {
 		logger.info("BloggToLocal start");
 		try {						
 			List<Article> articles = new BloggerExtractor().extract(BLOG_ATOM_FILE_PATH);
-			new BloggerTransformer(articles).traslateToFile(OUTPUT_FOLDER_PATH);
+			new JbakeConverter(articles).convertToFile(OUTPUT_FOLDER_PATH);
 		}
 		catch (Exception e) {
 			logger.error(e.getMessage(), e);
