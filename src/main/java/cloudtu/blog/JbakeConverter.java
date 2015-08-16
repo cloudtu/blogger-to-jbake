@@ -73,10 +73,13 @@ public class JbakeConverter {
 		int imgFileIndex = 1;
 		for (Element img : imgs) {
 			String srcImgUrl = img.attr("src"); //圖片來源網址
-			String srcImgFileExtension = StringUtils.substringAfterLast(srcImgUrl, ".");
-			if(img.parent().tagName().equalsIgnoreCase("a") && StringUtils.substringAfterLast(img.parent().attr("href"), ".").equals(srcImgFileExtension)){
-				// 當 <img> 被 <a> 包起來(e.g. <a><img/></a>) 時，取 <a> 裡的照片網址
-				srcImgUrl = img.parent().attr("href");
+			if(img.parent().tagName().equalsIgnoreCase("a")){
+				String srcImgFileExtension = StringUtils.substringAfterLast(img.parent().attr("href"), ".");
+				// 把附檔名為 "jpg","png","gif" 當作合法的圖片檔，其它附檔名都視為不合法
+				if(srcImgFileExtension.equalsIgnoreCase("jpg") || srcImgFileExtension.equalsIgnoreCase("png") || srcImgFileExtension.equalsIgnoreCase("gif")){
+					// 當 <img> 被 <a> 包起來(e.g. <a><img/></a>) 時，取 <a> 裡的照片網址
+					srcImgUrl = img.parent().attr("href");
+				}							
 			}
 			
 			String destImgFileName = destImgFileNamePrefix + imgFileIndex + "." + StringUtils.substringAfterLast(srcImgUrl, "."); //圖片存檔時的檔名
