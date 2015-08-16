@@ -163,6 +163,7 @@ public class JbakeConverter {
 						DateFormatUtils.format(post.getDate(), "yyyy"), 
 						DateFormatUtils.format(post.getDate(), "MM"), post.getFileName());
 		logger.info(String.format("save jbake post file : [%s]", postFilePath));
-		FileUtils.writeStringToFile(new File(postFilePath), postContent.toString(), Charset.forName("UTF-8"));		
+		FileUtils.writeStringToFile(new File(postFilePath), postContent.toString(), Charset.forName("UTF-8"));
+		SummaryReport.getInstance().addJbakePostFilePath(postFilePath);
 	}	
 }

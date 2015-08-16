@@ -10,6 +10,7 @@ import cloudtu.blog.Post;
 import cloudtu.blog.BloggerExtractor;
 import cloudtu.blog.FileDownloader;
 import cloudtu.blog.JbakeConverter;
+import cloudtu.blog.SummaryReport;
 
 public class Application {
 	private static final Logger logger = Logger.getLogger(Application.class);
@@ -38,6 +39,7 @@ public class Application {
 		finally{
 			FileDownloader.shutdown();
 		}
+		logger.info(SummaryReport.getInstance());
 		logger.info("BloggerToJbake stop");
 	}
 }
