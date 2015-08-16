@@ -6,7 +6,12 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class Article {
+/**
+ * blog post(blog 發布文章)
+ * 
+ * @author cloudtu
+ */
+public class Post {
 	private Date date;
 	private String title;
 	private String content;

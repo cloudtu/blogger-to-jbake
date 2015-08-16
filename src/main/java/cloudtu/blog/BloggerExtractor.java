@@ -14,51 +14,67 @@ import com.rometools.rome.feed.synd.SyndLink;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 
+/**
+ * Blogger post extractor
+ * 
+ * @author cloudtu
+ */
 public class BloggerExtractor {
 	private static final Logger logger = Logger.getLogger(BloggerExtractor.class);
 	
-	public List<Article> extract(String blogAtomFilePath) throws Exception{
-		List<Article> articles = new ArrayList<>();
+	/**
+	 * 從 Blogger 匯出的 atom 檔裡取出所有 blog post(blog 發布文章)<p/>
+	 * 
+	 * 注：只會取出 blog post，其它內容(e.g. comment,setting...etc)會過濾掉
+	 * 
+	 * @param blogAtomFilePath
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 */
+	public List<Post> extract(String blogAtomFilePath) throws Exception{
+		List<Post> posts = new ArrayList<>();
 		SyndFeedInput input = new SyndFeedInput();
 		SyndFeed feed = input.build(new XmlReader(new File(blogAtomFilePath)));
 		for (SyndEntry entry : feed.getEntries()) {					
-			// 利用這個 flag 判斷	entry 是否代表 blog article
-			// 程式只處理 blog article，其它內容(e.g. comment,setting...etc)會被過濾掉	
-			boolean isArticle = false;
+			// 利用這個 flag 判斷	entry 是否代表 blog post
+			// 程式只處理 blog post，其它內容(e.g. comment,setting...etc)會過濾掉	
+			boolean isPost = false;
 			
 			for (SyndCategory category : entry.getCategories()) {
-				// "kind#post" 代表該個 entry 專門記錄 blog article
+				// "kind#post" 代表該個 entry 專門記錄 blog post
 				if(category.getName().contains("kind#post")){
-					isArticle = true;
+					isPost = true;
 					break;
 				}
 			}
 			
-			if(!isArticle){
+			if(!isPost){
 				continue;
 			}
 			
-			Article article = new Article();
-			article.setDate(entry.getPublishedDate());
-			article.setTitle(entry.getTitle());
-			article.setContent(entry.getContents().get(0).getValue());
+			Post post = new Post();
+			post.setDate(entry.getPublishedDate());
+			post.setTitle(entry.getTitle());
+			post.setContent(entry.getContents().get(0).getValue());
 			
 			for (SyndCategory category : entry.getCategories()) {
 				if(!category.getName().contains("kind#post")){
-					article.addTag(category.getName());
+					post.addTag(category.getName());
 				}
 			}		
 			
 			for (SyndLink link : entry.getLinks()) {
 				if(link.getRel().equals("alternate")){
-					article.setFileName(StringUtils.substringAfterLast(link.getHref(), "/"));
+					post.setFileName(StringUtils.substringAfterLast(link.getHref(), "/"));
 					break;
 				}
 			}
 			
-			articles.add(article);
+			posts.add(post);
 		}
 		
-		return articles;	
+		return posts;	
 	}
 }

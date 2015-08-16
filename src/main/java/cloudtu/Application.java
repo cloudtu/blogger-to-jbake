@@ -6,8 +6,9 @@ import java.util.ResourceBundle;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
-import cloudtu.blog.Article;
+import cloudtu.blog.Post;
 import cloudtu.blog.BloggerExtractor;
+import cloudtu.blog.FileDownloader;
 import cloudtu.blog.JbakeConverter;
 
 public class Application {
@@ -28,11 +29,14 @@ public class Application {
 	public static void main(String[] args) {
 		logger.info("BloggerToJbake start");
 		try {						
-			List<Article> articles = new BloggerExtractor().extract(BLOG_ATOM_FILE_PATH);
-			new JbakeConverter(articles).convertToFile(OUTPUT_FOLDER_PATH);
+			List<Post> posts = new BloggerExtractor().extract(BLOG_ATOM_FILE_PATH);
+			new JbakeConverter(posts).convertToFile(OUTPUT_FOLDER_PATH);
 		}
 		catch (Exception e) {
 			logger.error(e.getMessage(), e);
+		}
+		finally{
+			FileDownloader.shutdown();
 		}
 		logger.info("BloggerToJbake stop");
 	}
