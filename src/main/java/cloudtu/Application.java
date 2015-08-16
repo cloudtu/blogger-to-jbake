@@ -5,12 +5,12 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
-import cloudtu.blog.AppConfig;
-import cloudtu.blog.Post;
 import cloudtu.blog.BloggerExtractor;
-import cloudtu.blog.FileDownloader;
 import cloudtu.blog.JbakeConverter;
-import cloudtu.blog.SummaryReport;
+import cloudtu.blog.model.Post;
+import cloudtu.blog.model.SummaryReport;
+import cloudtu.blog.util.AppConfig;
+import cloudtu.blog.util.FileDownloader;
 
 public class Application {
 	private static final Logger logger = Logger.getLogger(Application.class);

@@ -13,6 +13,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import cloudtu.blog.model.Post;
+import cloudtu.blog.model.SummaryReport;
+import cloudtu.blog.util.AppConfig;
+import cloudtu.blog.util.FileDownloader;
+
 /**
  * 將  blog post(blog 發布文章) 轉換成 Jbake 格式檔案
  * 

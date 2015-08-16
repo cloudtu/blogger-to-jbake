@@ -1,4 +1,4 @@
-package cloudtu.blog;
+package cloudtu.blog.util;
 
 import java.io.File;
 import java.net.URL;
@@ -7,6 +7,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+
+import cloudtu.blog.model.SummaryReport;
 
 /**
  * 檔案下載器<p/>

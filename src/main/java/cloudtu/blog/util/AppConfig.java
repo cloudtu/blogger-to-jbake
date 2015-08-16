@@ -1,4 +1,4 @@
-package cloudtu.blog;
+package cloudtu.blog.util;
 
 import java.util.ResourceBundle;
 

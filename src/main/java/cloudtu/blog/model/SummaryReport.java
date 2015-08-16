@@ -1,4 +1,4 @@
-package cloudtu.blog;
+package cloudtu.blog.model;
 
 import java.util.ArrayList;
 import java.util.List;
