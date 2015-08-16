@@ -72,9 +72,9 @@ public class JbakeConverter {
 		Elements imgs = doc.select("img");
 		int imgFileIndex = 1;
 		for (Element img : imgs) {
-			String srcImgUrl = img.attr("src"); //圖片來源網址												
-			// href attribute 副檔名長度為 3 代表是圖檔網址
-			if(img.parent().tagName().equalsIgnoreCase("a") && StringUtils.substringAfterLast(img.parent().attr("href"), ".").length() == 3){
+			String srcImgUrl = img.attr("src"); //圖片來源網址
+			String srcImgFileExtension = StringUtils.substringAfterLast(srcImgUrl, ".");
+			if(img.parent().tagName().equalsIgnoreCase("a") && StringUtils.substringAfterLast(img.parent().attr("href"), ".").equals(srcImgFileExtension)){
 				// 當 <img> 被 <a> 包起來(e.g. <a><img/></a>) 時，取 <a> 裡的照片網址
 				srcImgUrl = img.parent().attr("href");
 			}
