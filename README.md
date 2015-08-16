@@ -15,6 +15,10 @@
   # output path of result file
   # 執行結果要產生在哪個目錄
   outputFolderPath=z:/blog_out
+  
+  # my blogger site url
+  # 我的 blogger 網址
+  myBloggerUrl=cloudtu.blogspot.com
   ```
 
 2. 在 console 執行 `gradlew run`，並確認執行成功

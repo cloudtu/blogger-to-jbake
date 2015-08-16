@@ -21,6 +21,20 @@ import org.jsoup.select.Elements;
 public class JbakeConverter {
 	private static final Logger logger = Logger.getLogger(JbakeConverter.class);
 	
+	private static final String MY_BLOGGER_URL;
+	
+	static{
+		String tempMyBloggerUrl = AppConfig.getString("myBloggerUrl");
+		if(!tempMyBloggerUrl.contains("http://")){
+			tempMyBloggerUrl = "http://" + tempMyBloggerUrl; 
+		}
+		tempMyBloggerUrl = StringUtils.substringBeforeLast(tempMyBloggerUrl, ".");
+		
+		// 設定檔裡的值可能是 "http://{myBlogName}.blogspot.com/" 或 "{myBlogName}.blogspot.tw" 這種格式
+		// 這裡的常數值只需要保留 "http://{myBlogName}.blogspot" 這段值，尾巴其它值都要去掉
+		MY_BLOGGER_URL = tempMyBloggerUrl;
+	}
+	
 	private List<Post> posts;
 	
 	public JbakeConverter(List<Post> posts) {
@@ -33,6 +47,7 @@ public class JbakeConverter {
 		for (Post post : posts) {
 			Document doc = Jsoup.parseBodyFragment(post.getContent());
 			handleImgTag(post, doc, outputFolderPath);
+			handleATag(doc);
 			handlePreTag(doc);
 			handleSpanTag(doc);
 			handleFontTag(doc);									
@@ -100,6 +115,26 @@ public class JbakeConverter {
 			}
 		}	
 	}
+
+	/**
+	 * 如果 &lt;a&gt; tag 裡的 href attribute 指向自己 blog 裡特定文章網址(e.g. "http://{myName}.blogspot.com/{year}/{month}/{myPost.html}")，
+	 * 把它改成 "/blog/{year}/{month}/{myPost.html}" 這種格式的網址 
+	 * 
+	 * @param post
+	 * @param doc
+	 */
+	private void handleATag(Document doc){		
+		Elements aTags = doc.select("a");		
+		for (Element aTag : aTags) {
+			String link = aTag.attr("href");		
+			if(link.startsWith(MY_BLOGGER_URL)){				
+				String postUrl = StringUtils.substringAfter(link.replaceFirst(MY_BLOGGER_URL, ""), "/");
+				if(postUrl.contains("html")){
+					aTag.attr("href", String.format("/blog/%s", postUrl));					
+				}
+			}
+		}		
+	}	
 	
 	/**
 	 * 處理 &lt;pre class="brush: xxx"&gt; tag，讓它變成 &lt;pre class="prettyprint"&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;

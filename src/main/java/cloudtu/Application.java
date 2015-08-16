@@ -1,11 +1,11 @@
 package cloudtu;
 
 import java.util.List;
-import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
+import cloudtu.blog.AppConfig;
 import cloudtu.blog.Post;
 import cloudtu.blog.BloggerExtractor;
 import cloudtu.blog.FileDownloader;
@@ -14,16 +14,15 @@ import cloudtu.blog.SummaryReport;
 
 public class Application {
 	private static final Logger logger = Logger.getLogger(Application.class);
-	
-	private static final ResourceBundle rb = ResourceBundle.getBundle("application");	
-	private static final String BLOG_ATOM_FILE_PATH = rb.getString("blogAtomFilePath");	
+
+	private static final String BLOG_ATOM_FILE_PATH = AppConfig.getString("blogAtomFilePath");	
 	private static final String OUTPUT_FOLDER_PATH;
 	static{
-		if(rb.getString("outputFolderPath").endsWith("/")){
-			OUTPUT_FOLDER_PATH = StringUtils.substringBeforeLast(rb.getString("outputFolderPath"), "/");					
+		if(AppConfig.getString("outputFolderPath").endsWith("/")){
+			OUTPUT_FOLDER_PATH = StringUtils.substringBeforeLast(AppConfig.getString("outputFolderPath"), "/");					
 		}
 		else{
-			OUTPUT_FOLDER_PATH = rb.getString("outputFolderPath");
+			OUTPUT_FOLDER_PATH = AppConfig.getString("outputFolderPath");
 		}
 	}	
 	
