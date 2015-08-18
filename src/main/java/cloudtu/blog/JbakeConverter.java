@@ -142,7 +142,7 @@ public class JbakeConverter {
 	}	
 	
 	/**
-	 * 處理 &lt;pre class="brush: xxx"&gt; tag，讓它變成 &lt;pre class="prettyprint"&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;
+	 * 處理 &lt;pre class="brush: xxx"&gt; tag，讓它變成 &lt;pre class="prettyprint"&gt;&lt;/pre&gt;
 	 * 
 	 * @param doc
 	 */
@@ -150,7 +150,7 @@ public class JbakeConverter {
 		Elements pres = doc.select("pre[class^=brush:]");
 		for (Element pre : pres) {
 			pre.attr("class", "prettyprint");
-			pre.html("<code>" + pre.html() + "</code>");
+			pre.html(pre.html());
 		}		
 	}
 		
