@@ -102,7 +102,7 @@ public class JbakeConverter {
 				}							
 			}
 			
-			String destImgFileName = destImgFileNamePrefix + imgFileIndex + "." + StringUtils.substringAfterLast(srcImgUrl, "."); //圖片存檔時的檔名
+			String destImgFileName = StringUtils.substringAfterLast(srcImgUrl, "/");
 			imgFileIndex++;
 			
 			// <img> 裡的圖片檔存到 local
