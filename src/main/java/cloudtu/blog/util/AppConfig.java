@@ -23,6 +23,6 @@ public class AppConfig
      * 
      */
     public static String getString(String key){
-    	return rb.getString(key);
+        return rb.getString(key);
     }
 }
