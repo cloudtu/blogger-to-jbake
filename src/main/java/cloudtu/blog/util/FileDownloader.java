@@ -39,7 +39,7 @@ public class FileDownloader {
 			public void run() {
 				try {
 					logger.info(String.format("download file from [%s] to [%s]", srcUrl, destFilePath));
-					FileUtils.copyURLToFile(new URL(srcUrl), new File(destFilePath), 3000, 5000);
+					FileUtils.copyURLToFile(new URL(srcUrl), new File(destFilePath), 10000, 10000);
 					SummaryReport.getInstance().addDownloadFilePath(destFilePath);
 				}
 				catch (Exception ex) {

@@ -1,11 +1,10 @@
 # Blogger to Jbake
 
-從 [Blogger](https://www.blogger.com) 搬家到 [Jbake](http://www.jbake.org/) 的搬遷工具。
-可以把放在 Blogger 裡的個人文章、圖片全部匯出至本地端，並且轉成 Jbake 可以匯入的檔案格式。
+Relocation Tool to move your contents from [Blogger](https://www.blogger.com) to [Jbake](http://www.jbake.org/). It can retrieve Blogger's personal articles, pictures are all the content is stored to the local end, and converted into a format that Jbake can import.
 
-## 如何使用
+## how to use
 
-1. 修改 `src/main/resources/application.properties` 設定
+1. Change the settings file `src/main/resources/application.properties`
 
   ```
   # blogger's atom file path
@@ -15,15 +14,15 @@
   # output path of result file
   # 執行結果要產生在哪個目錄
   outputFolderPath=z:/blog_out
-  
+
   # my blogger site url
   # 我的 blogger 網址
   myBloggerUrl=http://cloudtu.blogspot.com
   ```
 
-2. 在 console 執行 `gradlew run`，並確認執行成功
+2. Enter in the console `gradlew run`， and confirm that it executes correctly
 
-3. 執行結果目錄會產生 Jbake 可以匯入的目錄與檔案
+3. The results of the execution will produce directories and files that Jbake can import
 
   ```
   Z:.
@@ -45,19 +44,19 @@
                   201502261657_2.png
   ```
 
-## 在 eclispe 執行或開發
+## Execution or development with eclispe
 
-如果要讓程式可以在 eclipse 上執行或開發，請執行下述步驟
+If you want the program to be executed or developed with Eclipse, follow the steps below
 
-1. 在 console 執行 `gradlew eclipse`
+1. Enter in the console `gradlew eclipse`
 
-2. 在 eclipse 裡把 `blogger-to-jbake` 專案匯入
+2. Inside Eclipse `blogger-to-jbake` execute project import
 
-## 調整執行時的 log 明細
+## adjust the implementation of the log details
 
-log 設定檔放在 `src/main/resources/log4j.properties`，可視需求調整 log level
+change the log profile in `src/main/resources/log4j.properties`， and adjust the log level as needed
 
-## 如何客製化
+## How to customize
 
-如果你需要把 Blogger 匯出的資料轉成其它格式檔案(e.g. [jekyll](http://jekyllrb.com/))，
-可以參考  [JbakeConverter.java](https://github.com/cloudtu/blogger-to-jbake/blob/master/src/main/java/cloudtu/blog/JbakeConverter.java) 的寫法自行客製
+If you need to convert the data exported by Blogger into other format files (e.g. [jekyll] (http://jekyllrb.com/)),
+You can refer to [JbakeConverter.java] (https://github.com/cloudtu/blogger-to-jbake/blob/master/src/main/java/cloudtu/blog/JbakeConverter.java)
