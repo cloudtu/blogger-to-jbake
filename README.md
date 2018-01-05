@@ -58,5 +58,5 @@ change the log profile in `src/main/resources/log4j.properties`， and adjust th
 
 ## How to customize
 
-If you need to convert the data exported by Blogger into other format files (e.g. [jekyll] (http://jekyllrb.com/)),
-You can refer to [JbakeConverter.java] (https://github.com/cloudtu/blogger-to-jbake/blob/master/src/main/java/cloudtu/blog/JbakeConverter.java)
+If you need to convert the data exported by Blogger into other format files (e.g. [jekyll](http://jekyllrb.com/)),
+You can refer to [JbakeConverter.java](https://github.com/cloudtu/blogger-to-jbake/blob/master/src/main/java/cloudtu/blog/JbakeConverter.java)
